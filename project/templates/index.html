@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <title>Document</title>
+    <style>
+      .chart-container-class {
+        position: relative;
+        height: 550px;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid p-5">
+      <div class="card bg-light text-dark mb-5">
+        <div class="card-header text-dark">
+          <h3 class="p-2 d-flex justify-content-center">A Detection System for Classifying Social Accounts on Twitter</h3>
+        </div>
+        <form>
+          <div class="card-body">
+
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="m-2">
+                  <label for="inputFileType" class="form-label"
+                    >Input File Type:</label
+                  >
+                  <select
+                    class="form-control form-select"
+                    placeholder="Enter Input File Type"
+                    name="inputFileType"
+                    id="inputFileType"
+                  >
+                    <option value="csv">CSV</option>
+                    <option value="json">JSON</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="m-2">
+                  <label for="outputFileType" class="form-label"
+                    >Output File Type:</label
+                  >
+                  <select
+                    class="form-control form-select"
+                    placeholder="Enter Output File Type"
+                    name="outputFileType"
+                    id="outputFileType"
+                  >
+                    <option value="csv">CSV</option>
+                    <option value="json">JSON</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="m-2">
+                  <label for="modelTrainWith" class="form-label">
+                    Dataset Model Trianed With:</label
+                  >
+                  <select
+                    class="form-control form-select"
+                    placeholder="Enter Model Type"
+                    name="modelTrainWith"
+                    id="modelTrainWith"
+                  >
+                    <option value="v4">Botometer V4</option>
+                    <option value="lite" selected>Botometer Lite</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="m-2">
+                  <label for="featureNumber" class="form-label"
+                    >Number of Features:</label
+                  >
+                  <select
+                    class="form-control form-select"
+                    placeholder="Enter Number of Features"
+                    name="featureNumber"
+                    id="featureNumber"
+                  >
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="all">All</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="m-2">
+                  <label for="mlModel" class="form-label"> ML Model:</label>
+                  <select
+                    class="form-control form-select"
+                    placeholder="Enter ML Model"
+                    name="mlModel"
+                    id="mlModel"
+                  >
+                    <option value="ab">AdaBoost</option>
+                    <option value="bc">Bagging Classifier</option>
+                    <option value="gn">Gaussian Naive Bayes</option>
+                    <option value="et">Extra Tree Classifier</option>
+                    <option value="knn" selected>K Nearest Neighbor</option>
+                    <option value="lr">Logistic Regression</option>
+                    <option value="dt">Decision Tree</option>
+                    <option value="rf">Random Forest</option>
+                    <option value="svm">Support Vector Machines</option>
+                    <option value="xgb">
+                      eXtreme Gradient Boosting (XGBoost)
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="m-2">
+                  <label for="formFile" class="form-label"
+                    >Socal Bot Input Samples</label
+                  >
+                  <input
+                    class="form-control"
+                    type="file"
+                    id="file"
+                    name="file"
+                  />
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check m-2">
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="attachInputToOutput"
+                      id="attachInputToOutput"
+                      checked
+                    />
+                    Attach Input To Output File
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check m-2">
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="applyOUSampling"
+                      id="applyOUSampling"
+                    />
+                    Apply Over/Under Sampling
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="row g-3">
+              <div class="col-12 d-md-flex justify-content-md-end">
+                <button
+                  type="button"
+                  class="btn btn-primary mx-2"
+                  onclick="showResultFunction(event)"
+                >
+                  Show Results
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary mx-2"
+                  onclick="dowanloadResultFunction(event)"
+                >
+                  Download Results
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card bg-light text-dark mt-5">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="chart-container-class" id="chart-container"></div>
+          </div>
+          <div class="col-6">
+            <div class="chart-container-class" id="chart-container-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+<script>
+  const label_style=()=>{
+    return {
+      show: true,
+      position: 'middle',
+      textStyle:{
+          fontFamily:'Roboto',
+          fontSize: 22,
+          fontWeight: 400
+      },
+      formatter: function (params) {
+        return `${(params.data.value[0]/params.data.value[1].total*100).toFixed(2)}%`;
+      }
+    }
+  }
+
+
+  var myChart = echarts.init(document.getElementById("chart-container"), null, {
+    renderer: "canvas",
+    useDirtyRect: false,
+  });
+  myChart.setOption( {
+    title: {
+      text: 'Total percentage by social classes',
+      left: 'center',
+      padding:[10,0,0,0]
+    },
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      data:["Bot","Human"],
+      top: "5%",
+      textStyle:{
+          fontFamily:'Roboto',
+          fontSize: 22,
+          fontWeight: 400
+      },
+    },
+    series: [
+      {
+        name: "",
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: "#fff",
+          borderWidth: 2,
+        },
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: "bold",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: [
+          { value: [50,{total:100}], name: "Human",label:label_style(),itemStyle: {color:"green"}},
+          { value: [50,{total:100}], name: "Bot",label:label_style(),itemStyle: {color:"red"}}
+        ],
+      },
+    ],
+  });
+
+  var myChart2 = echarts.init(document.getElementById("chart-container-2"), null, {
+    renderer: "canvas",
+    useDirtyRect: false,
+  });
+  myChart2.setOption( {
+    title: {
+      text: '2D TSNE for classified samples',
+      padding:[10,0,0,0],
+      left: 'center'
+    },
+    xAxis: {
+      type: 'value',
+      name: 'X-axis',
+      nameLocation: 'middle',
+      nameGap: 10,
+      nameTextStyle:{
+          fontFamily:'Roboto',
+          fontSize: 22,
+          fontWeight: 400
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Y-axis',
+      nameLocation: 'middle',
+      nameGap: 10,
+      nameTextStyle:{
+          fontFamily:'Roboto',
+          fontSize: 22,
+          fontWeight: 400
+      }
+    },
+    series: [{
+      symbolSize: 5,
+      data: [],
+      type: 'scatter'
+    }]
+  });
+
+
+
+  const showResultFunction = (e) => {
+    e.preventDefault();
+    submitButton("show");
+  };
+  const dowanloadResultFunction = (e) => {
+    e.preventDefault();
+    submitButton("download");
+  };
+  async function postData(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache",
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        //'Content-Type': 'multipart/form-data'
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: data,
+    });
+    return response;
+  }
+  const submitButton = async (type) => {
+    const formData = new FormData();
+    formData.append(
+      "file",
+      document.querySelector('input[type="file"]').files[0]
+    );
+    formData.append("type", type);
+    formData.append("inputFileType", document.getElementById("inputFileType").value);
+    formData.append("outputFileType", document.getElementById("outputFileType").value);
+
+    formData.append("mlModel", document.getElementById("mlModel").value);
+    formData.append(
+      "featureNumber",
+      document.getElementById("featureNumber").value
+    );
+    formData.append(
+      "applyOUSampling",
+      document.getElementById("applyOUSampling").checked
+    );
+    formData.append(
+      "datasetVersion",
+      document.getElementById("modelTrainWith").value
+    );
+    formData.append(
+      "attachInputToOutput",
+      document.getElementById("attachInputToOutput").checked
+    );
+    let response = await postData("http://127.0.0.1:5000/", formData);
+
+    if (type == "download") {
+      const filename = response.headers
+        .get("content-disposition")
+        .split(";")
+        .find((n) => n.includes("filename="))
+        .replace("filename=", "")
+        .trim();
+      const URL = window.URL.createObjectURL(
+        new Blob([await response.blob()], { type: "text/csv;charset=utf-8" })
+      );
+      const link = document.createElement("a");
+      link.href = URL;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(URL);
+    } else if (type == "show") {
+      let data = await response.json();
+
+      let points=JSON.parse(data.data)
+      let stat = JSON.parse(data.stat);
+
+      myChart.setOption({
+        series: {
+          data:[
+            { 
+              value:  [stat["green"],{total:Number(stat["green"])+Number(stat["red"])}], 
+              name: "Human" ,
+              label:label_style(),
+              itemStyle: {color:"green"}
+            },
+            { 
+              value:  [stat["red"],{total:Number(stat["green"])+Number(stat["red"])}], 
+              name: "Bot",
+              label: label_style(),
+              itemStyle: {color:"red"}
+            },
+          ]
+        }
+      });
+
+      myChart2.setOption({
+        series: {
+          data:points.map((p) => ({
+            name: 'point',
+            value: [p[0], p[1]],
+            itemStyle: {
+              color:p[2]
+            }
+          }))
+        }
+      });
+    }
+  };
+</script>
